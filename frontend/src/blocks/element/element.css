@@ -1,0 +1,10 @@
+.element {
+  display: grid;
+  position: relative;
+  grid-template-rows: 282px 1fr;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  color: black;
+}
