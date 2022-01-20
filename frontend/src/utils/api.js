@@ -80,7 +80,7 @@ class Api {
 }
 
 const api = new Api({
-  url: 'https://mesto.nomoreparties.co/v1/cohort-28',
+  url: 'http://api.starikov.nomoredomains.work',
   headers: {
     authorization: 'd7e22a8b-edd0-4655-a36c-592649df720b',
     'Content-Type': 'application/json'
