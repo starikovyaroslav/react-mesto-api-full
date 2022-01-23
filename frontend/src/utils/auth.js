@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://api.starikov.nomoredomains.work'
+export const BASE_URL = 'https://api.starikov.nomoredomains.work'
 
 const handleResponse = (res) => {
   if (res.ok) {
@@ -11,8 +11,10 @@ export const register = (password, email) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
-      "Content-Type": "application/json"
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
+    credentials: "include",
     body: JSON.stringify({password, email})
   })
   .then(handleResponse)
@@ -22,8 +24,10 @@ export const authorize = (password, email) => {
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     headers: {
-      "Content-Type": "application/json"
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
+    credentials: "include",
     body: JSON.stringify({password, email})
   })
   .then(handleResponse)

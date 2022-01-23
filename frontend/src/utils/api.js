@@ -14,7 +14,8 @@ class Api {
   getUserInfo() {
     return fetch(this._url + '/users/me', {
       method: 'GET',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include',
     })
       .then(this._checkResponse)
   }
@@ -22,7 +23,8 @@ class Api {
   getInitialCards() {
     return fetch(this._url + '/cards', {
       method: 'GET',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include',
     })
       .then(this._checkResponse)
   }
@@ -31,6 +33,7 @@ class Api {
     return fetch(this._url + '/users/me', {
       method: 'PATCH',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify({
         name: data.name,
         about: data.about
@@ -43,6 +46,7 @@ class Api {
     return fetch(this._url + '/cards', {
       method: 'POST',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify({
         name: data.name,
         link: data.link
@@ -54,7 +58,8 @@ class Api {
   deleteCard(id) {
     return fetch(this._url + '/cards/likes/' + id, {
       method: 'DELETE',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include',
     })
       .then(this._checkResponse)
   }
@@ -62,15 +67,17 @@ class Api {
   changeLikeCardStatus(id, isLiked) {
     return fetch(this._url + '/cards/likes/' + id, {
       method: `${isLiked ? 'PUT' : 'DELETE'}`,
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include',
     })
     .then(this._checkResponse)
   }
 
-  editAvatar(link){
+  editAvatar(link) {
     return fetch(this._url +'/users/me/avatar', {
       method: 'PATCH',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify({
         avatar: link.avatar
       })
@@ -80,10 +87,11 @@ class Api {
 }
 
 const api = new Api({
-  url: 'http://api.starikov.nomoredomains.work',
+  url: 'https://api.starikov.nomoredomains.work',
+  credentials: 'include',
   headers: {
-    authorization: 'd7e22a8b-edd0-4655-a36c-592649df720b',
-    'Content-Type': 'application/json'
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
   }
 });
 

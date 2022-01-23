@@ -128,18 +128,11 @@ function App() {
 
 
   function checkToken() {
-    const jwt = localStorage.getItem('jwt')
+    const token = localStorage.getItem('token')
 
-    if(jwt) {
-      auth.validateToken(jwt)
-        .then((res) => {
-          if(res) {
-            setLoggedIn(true);
-            setEmail(res.data.email);
-            navigate('/');
-          }
-        })
-        .catch((err) => console.log(err))
+    if (token) {
+      setLoggedIn(true);
+      navigate('/');
     }
   }
 
@@ -155,19 +148,17 @@ function App() {
 
   function handleAuthorization(password, email) {
     auth.authorize(password, email)
-      .then((token) => {
-        auth.validateToken(token)
           .then((res) => {
-            setLoggedIn(true);
-            setEmail(res.data.email);
+            localStorage.setItem('token', res.token);
+            checkToken();
+            setEmail(email);
             navigate('/');
           })
-      })
       .catch((err) => console.log(err))
   }
 
   function onSignOut() {
-    localStorage.removeItem('jwt');
+    localStorage.removeItem('token');
     setLoggedIn(false);
   }
 
