@@ -1,51 +1,44 @@
-export const BASE_URL = 'https://api.starikov.nomoredomains.work'
+class Auth {
 
-const handleResponse = (res) => {
-  if (res.ok) {
-    return res.json();
+  constructor({ url, headers}) {
+    this.url = url;
+    this.headers = headers;
   }
-  return Promise.reject(`Ошибка: ${res.status}`)
-};
 
-export const register = (password, email) => {
-  return fetch(`${BASE_URL}/signup`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    credentials: "include",
-    body: JSON.stringify({password, email})
-  })
-  .then(handleResponse)
-}
-
-export const authorize = (password, email) => {
-  return fetch(`${BASE_URL}/signin`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    credentials: "include",
-    body: JSON.stringify({password, email})
-  })
-  .then(handleResponse)
-  .then((data) => {
-    if (data.token) {
-      localStorage.setItem('jwt', data.token)
-      return data.token
+  _handleResponse = (res) => {
+    if (res.ok) {
+      return res.json();
     }
-  })
+    return Promise.reject(`Ошибка: ${res.status}`)
+  };
+
+  register = ({ password, email }) => {
+    return fetch(`${this.url}/signup`, {
+      method: 'POST',
+      headers: this.headers,
+      credentials: "include",
+      body: JSON.stringify({password, email})
+    })
+    .then(this._handleResponse)
+  }
+
+  authorize = ({ password, email }) => {
+    return fetch(`${this.url}/signin`, {
+      method: 'POST',
+      headers: this.headers,
+      credentials: "include",
+      body: JSON.stringify({password, email})
+    })
+    .then(this._handleResponse)
+  }
 }
 
-export const validateToken = token => {
-  return fetch(`${BASE_URL}/users/me`, {
-    method: 'GET',
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization" : `Bearer ${token}`
-    }
-  })
-  .then(handleResponse)
-}
+const auth = new Auth({
+  url: 'https://api.starikov.nomoredomains.work',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+
+export default auth;
+

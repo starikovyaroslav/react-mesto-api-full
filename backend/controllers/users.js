@@ -7,7 +7,7 @@ const ConflictError = require('../errors/ConflictError');
 
 const getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.send({ data: users }))
+    .then((users) => res.send(users))
     .catch(next);
 };
 
@@ -15,7 +15,7 @@ const getUserById = (req, res, next) => {
   User.findById(req.params._id)
     .orFail(new NotFoundError('Пользователь с указанным id не найден'))
     .then((user) => {
-      res.send({ data: user });
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -45,7 +45,7 @@ const createUser = (req, res, next) => {
       })
         .then(() => {
           res.send({
-            data: {
+            user: {
               name, about, avatar, email,
             },
           });
@@ -63,7 +63,7 @@ const updateProfile = (req, res, next) => {
     upsert: true,
   })
     .orFail(new NotFoundError('Пользователь с указанным id не найден'))
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
         throw new ValidationError('Передан некорректный id');
@@ -84,7 +84,7 @@ const updateAvatar = (req, res, next) => {
     upsert: true,
   })
     .orFail(new NotFoundError('Пользователь с указанным id не найден'))
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
         throw new ValidationError('Передан некорректный id');
@@ -119,7 +119,7 @@ const login = (req, res, next) => {
 const getUserData = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
-      res.send({ data: user });
+      res.send(user);
     })
     .catch(next);
 };

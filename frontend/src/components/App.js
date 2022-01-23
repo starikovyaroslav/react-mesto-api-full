@@ -14,7 +14,7 @@ import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
 import InfoTooltip from './InfoTooltip';
-import * as auth from '../utils/auth';
+import auth from '../utils/auth';
 import success from '../images/success.svg';
 import fail from '../images/fail.svg'
 
@@ -32,7 +32,7 @@ function App() {
   const [message, setMessage] = React.useState({ imgPath: '', text: '' })
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+/*   React.useEffect(() => {
     api.getUserInfo()
       .then((res) => setCurrentUser(res))
       .catch((err) => console.log(err));
@@ -43,8 +43,8 @@ function App() {
       .then((res) => setCards(res))
       .catch((err) => console.log(err));
   }, [])
-
-  React.useEffect(() => checkToken(), [])
+ */
+/*   React.useEffect(() => checkToken(), []) */
 
   React.useEffect(() => {
     const closeByEscape = (e) => {
@@ -126,41 +126,51 @@ function App() {
       .catch((err) => console.log(err))
   }
 
-
-  function checkToken() {
-    const token = localStorage.getItem('token')
-
-    if (token) {
-      setLoggedIn(true);
-      navigate('/');
-    }
-  }
-
-  function handleRegistration(password, email) {
-    auth.register(password, email)
-      .then((res) => {
-        setEmail(res.data.email)
+  function handleRegistration({ password, email }) {
+    auth.register({ password, email })
+      .then(() => {
         setMessage({ imgPath: success, text: 'Вы успешно зарегистрировались!' })
       })
       .catch(() => setMessage({ imgPath: fail, text: 'Что-то пошло не так! Попробуйте ещё раз.' }))
       .finally(() => setIsInfoTooltipOpen(true))
   }
 
-  function handleAuthorization(password, email) {
-    auth.authorize(password, email)
+  function handleAuthorization({ password, email }) {
+    auth.authorize({ password, email })
           .then((res) => {
             localStorage.setItem('token', res.token);
             checkToken();
             setEmail(email);
-            navigate('/');
           })
       .catch((err) => console.log(err))
+  }
+
+  function checkToken() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setLoggedIn(true);
+      navigate('/');
+    }
   }
 
   function onSignOut() {
     localStorage.removeItem('token');
     setLoggedIn(false);
   }
+
+  React.useEffect(() => {
+    checkToken();
+    navigate('/');
+    if (loggedIn) {
+        Promise.all([api.getUserInfo(), api.getInitialCards()])
+            .then(([user, cardsData]) => {
+                setCurrentUser(user);
+                setCards(cardsData.reverse());
+            })
+            .catch((err) => console.log(err));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [loggedIn]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
