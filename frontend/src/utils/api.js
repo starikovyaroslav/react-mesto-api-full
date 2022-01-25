@@ -13,8 +13,8 @@ class Api {
 
   getUserInfo() {
     return fetch(this._url + '/users/me', {
-      method: 'GET',
       credentials: 'include',
+      method: 'GET',
       headers: this._headers,
     })
       .then(this._checkResponse)
@@ -22,9 +22,9 @@ class Api {
 
   getInitialCards() {
     return fetch(this._url + '/cards', {
+      credentials: 'include',
       method: 'GET',
       headers: this._headers,
-      credentials: 'include',
     })
       .then(this._checkResponse)
   }
@@ -56,7 +56,7 @@ class Api {
   }
 
   deleteCard(id) {
-    return fetch(this._url + '/cards/likes/' + id, {
+    return fetch(this._url + '/cards/' + id, {
       method: 'DELETE',
       headers: this._headers,
       credentials: 'include',
@@ -65,7 +65,7 @@ class Api {
   }
 
   changeLikeCardStatus(id, isLiked) {
-    return fetch(this._url + '/cards/likes/' + id, {
+    return fetch(`${this._url}/cards/${id}/likes`, {
       method: `${isLiked ? 'PUT' : 'DELETE'}`,
       headers: this._headers,
       credentials: 'include',
